@@ -16,6 +16,45 @@ Item {
     property real padding: 4
     property var inputField: messageInputField
     property string commandPrefix: "/"
+    property bool modelPickerOpen: false
+    property bool configPickerOpen: false
+    property bool agyLoggedIn: true
+
+    function refreshAgyAuth() {
+        agyAuthProc.running = false;
+        agyAuthProc.running = true;
+    }
+
+    function openAgyLogin() {
+        const agyBin = FileUtils.trimFileProtocol(`${Directories.home}/.local/bin/agy`);
+        agyLoginProc.command = ["bash", "-c", `${Config.options.apps.terminal} -e bash -c '"$1" -i /login; echo; read -p "Press Enter to close..."' _ "$1"`, "_", agyBin];
+        agyLoginProc.running = false;
+        agyLoginProc.running = true;
+    }
+
+    Process {
+        id: agyAuthProc
+        command: ["bash", "-c", "if [ -s \"$HOME/.gemini/antigravity-cli/antigravity-oauth-token\" ]; then echo 1; else d=$(mktemp -d); printf '#!/bin/sh\\nexit 0\\n' > \"$d/xdg-open\"; chmod +x \"$d/xdg-open\"; PATH=\"$d:$PATH\" BROWSER=true timeout 4 \"$HOME/.local/bin/agy\" models >/dev/null 2>&1 && echo 1 || echo 0; rm -rf \"$d\"; fi"]
+        stdout: StdioCollector {
+            onStreamFinished: root.agyLoggedIn = (text.trim() === "1")
+        }
+    }
+
+    Process {
+        id: agyLoginProc
+        onExited: {
+            root.refreshAgyAuth();
+            Ai.refreshAgyModels();
+        }
+    }
+
+    Component.onCompleted: root.refreshAgyAuth()
+    onVisibleChanged: {
+        if (visible) {
+            root.refreshAgyAuth();
+            if (Ai.agyFamilies.length === 0) Ai.refreshAgyModels();
+        }
+    }
 
     property var suggestionQuery: ""
     property var suggestionList: []
@@ -197,7 +236,47 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         },
     ]
 
+    property var extraAttachedFiles: []
+
+    function attachDroppedFiles(rawList) {
+        const next = root.extraAttachedFiles.slice();
+        for (let i = 0; i < rawList.length; i++) {
+            let p = String(rawList[i] ?? "").trim();
+            if (p.startsWith("file://")) p = FileUtils.trimFileProtocol(p);
+            try { p = decodeURIComponent(p); } catch (e) {}
+            if (!p) continue;
+            if (Ai.pendingFilePath === "") {
+                Ai.attachFile(p);
+            } else if (Ai.pendingFilePath !== p && next.indexOf(p) < 0) {
+                next.push(p);
+            }
+        }
+        root.extraAttachedFiles = next;
+    }
+
+    function removeExtraAttachedFile(path) {
+        root.extraAttachedFiles = root.extraAttachedFiles.filter(p => p !== path);
+    }
+
     function handleInput(inputText) {
+        if (Ai.getModel()?.api_format === "agy" && inputText.startsWith(root.commandPrefix)) {
+            const parts = inputText.trim().split(/\s+/);
+            const cmd = parts[0].substring(1);
+            if (cmd === "model" || cmd === "effort") { root.configPickerOpen = false; root.modelPickerOpen = true; return; }
+            if (cmd === "config" || cmd === "settings") { root.modelPickerOpen = false; root.configPickerOpen = true; return; }
+            if (cmd === "login") {
+                root.openAgyLogin();
+                return;
+            }
+            if (cmd === "clear") { Ai.clearMessages(); return; }
+            const extraFiles = root.extraAttachedFiles.slice();
+            root.extraAttachedFiles = [];
+            const finalMsg = extraFiles.length > 0
+                ? extraFiles.map(p => `[Attached file: ${p}]`).join("\n") + (inputText ? "\n" + inputText : "")
+                : inputText;
+            Ai.sendUserMessage(finalMsg);
+            return;
+        }
         if (inputText.startsWith(root.commandPrefix)) {
             // Handle special commands
             const command = inputText.split(" ")[0].substring(1);
@@ -305,6 +384,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             }
             Rectangle {
                 id: statusBg
+                visible: (Ai.getModel()?.api_format !== "agy") || Ai.tokenCount.total > 0
                 z: 2
                 anchors {
                     horizontalCenter: parent.horizontalCenter
@@ -324,12 +404,14 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     spacing: 10
 
                     StatusItem {
+                        visible: Ai.getModel()?.requires_key ?? true
                         icon: Ai.currentModelHasApiKey ? "key" : "key_off"
                         statusText: ""
                         description: Ai.currentModelHasApiKey ? Translation.tr("API key is set\nChange with /key YOUR_API_KEY") : Translation.tr("No API key\nSet it with /key YOUR_API_KEY")
                     }
-                    StatusSeparator {}
+                    StatusSeparator { visible: Ai.getModel()?.requires_key ?? true }
                     StatusItem {
+                        visible: Ai.getModel()?.api_format !== "agy"
                         icon: "device_thermostat"
                         statusText: Ai.temperature.toFixed(1)
                         description: Translation.tr("Temperature\nChange with /temp VALUE")
@@ -352,6 +434,16 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 vertical: true
             }
 
+            MouseArea {
+                anchors.fill: parent
+                visible: root.modelPickerOpen || root.configPickerOpen
+                z: 5
+                onPressed: mouse => {
+                    root.modelPickerOpen = false;
+                    root.configPickerOpen = false;
+                    mouse.accepted = false;
+                }
+            }
             StyledListView { // Message list
                 id: messageListView
                 z: 0
@@ -413,42 +505,78 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             showArrows: root.suggestionList.length > 1
         }
 
-        FlowButtonGroup { // Suggestions
+        Rectangle { // Native CLI-style command & suggestion palette
             id: suggestions
             visible: root.suggestionList.length > 0 && messageInputField.text.length > 0
             property int selectedIndex: 0
             Layout.fillWidth: true
-            spacing: 5
+            implicitHeight: Math.min(220, suggestionListView.contentHeight + 12)
+            clip: true
+            radius: Appearance.rounding.normal
+            color: Appearance.colors.colLayer2
+            border.width: 1
+            border.color: Appearance.colors.colOutlineVariant
 
-            Repeater {
-                id: suggestionRepeater
+            ListView {
+                id: suggestionListView
+                anchors.fill: parent
+                anchors.margins: 6
+                clip: true
+                spacing: 2
+                currentIndex: suggestions.selectedIndex
+                highlightFollowsCurrentItem: true
+                onCurrentIndexChanged: positionViewAtIndex(currentIndex, ListView.Contain)
                 model: {
                     suggestions.selectedIndex = 0;
-                    return root.suggestionList.slice(0, 10);
+                    return root.suggestionList;
                 }
-                delegate: ApiCommandButton {
+                delegate: RippleButton {
                     id: commandButton
-                    colBackground: suggestions.selectedIndex === index ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSecondaryContainer
-                    bounce: false
-                    contentItem: StyledText {
-                        font.pixelSize: Appearance.font.pixelSize.small
-                        color: Appearance.m3colors.m3onSurface
-                        horizontalAlignment: Text.AlignHCenter
-                        text: modelData.displayName ?? modelData.name
-                    }
-
+                    required property var modelData
+                    required property int index
+                    readonly property bool active: suggestions.selectedIndex === index
+                    width: suggestionListView.width
+                    implicitHeight: 32
+                    buttonRadius: Appearance.rounding.small
+                    colBackground: active ? Appearance.colors.colPrimaryContainer : "transparent"
+                    colBackgroundHover: active ? Appearance.colors.colPrimaryContainer : Appearance.colors.colSurfaceContainerHigh
                     onHoveredChanged: {
-                        if (commandButton.hovered) {
+                        if (commandButton.hovered)
                             suggestions.selectedIndex = index;
-                        }
                     }
-                    onClicked: {
-                        suggestions.acceptSuggestion(modelData.name);
+                    onClicked: suggestions.acceptSuggestion(modelData.name, modelData.instant ?? false)
+
+                    contentItem: RowLayout {
+                        anchors.fill: parent
+                        anchors.leftMargin: 8
+                        anchors.rightMargin: 8
+                        spacing: 10
+                        StyledText {
+                            font.pixelSize: Appearance.font.pixelSize.small
+                            font.family: Appearance.font.family.monospace
+                            font.weight: Font.Medium
+                            color: commandButton.active ? Appearance.colors.colPrimary : Appearance.m3colors.m3onSurface
+                            text: modelData.displayName ?? modelData.name
+                        }
+                        StyledText {
+                            Layout.fillWidth: true
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            color: commandButton.active ? Appearance.colors.colOnPrimaryContainer : Appearance.colors.colSubtext
+                            horizontalAlignment: Text.AlignRight
+                            maximumLineCount: 1
+                            elide: Text.ElideRight
+                            text: (modelData.description ?? "").replace(/\n+/g, " · ")
+                        }
                     }
                 }
             }
 
-            function acceptSuggestion(word) {
+            function acceptSuggestion(word, isInstant = false) {
+                if (isInstant && Ai.getModel()?.api_format === "agy") {
+                    messageInputField.clear();
+                    root.handleInput(word);
+                    return;
+                }
                 const words = messageInputField.text.trim().split(/\s+/);
                 if (words.length > 0) {
                     words[words.length - 1] = word;
@@ -469,13 +597,96 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             }
         }
 
+        Rectangle {
+            visible: (Ai.getModel()?.api_format === "agy") && (!root.agyLoggedIn || agyLoginProc.running)
+            Layout.fillWidth: true
+            implicitHeight: agyAuthCol.implicitHeight + 16
+            radius: Appearance.rounding.normal
+            color: Appearance.colors.colLayer2
+            border.width: 1
+            border.color: Appearance.colors.colOutlineVariant
+
+            ColumnLayout {
+                id: agyAuthCol
+                anchors.fill: parent
+                anchors.margins: 8
+                spacing: 6
+
+                RowLayout {
+                    id: agyAuthRow
+                    Layout.fillWidth: true
+                    spacing: 8
+                    MaterialLoadingIndicator {
+                        visible: agyLoginProc.running
+                        implicitSize: 18
+                    }
+                    MaterialSymbol {
+                        visible: !agyLoginProc.running
+                        text: "passkey"
+                        iconSize: 20
+                        color: Appearance.colors.colPrimary
+                    }
+                    StyledText {
+                        Layout.fillWidth: true
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                        color: Appearance.m3colors.m3onSurface
+                        elide: Text.ElideRight
+                        text: agyLoginProc.running
+                            ? Translation.tr("Signing in to Agy...")
+                            : Translation.tr("Sign in required to use Agy")
+                    }
+                    RippleButton {
+                        implicitWidth: agyLoginBtnTxt.implicitWidth + 20
+                        implicitHeight: 28
+                        buttonRadius: Appearance.rounding.full
+                        enabled: !agyLoginProc.running
+                        colBackground: Appearance.colors.colPrimary
+                        onClicked: root.openAgyLogin()
+                        contentItem: StyledText {
+                            id: agyLoginBtnTxt
+                            anchors.centerIn: parent
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            font.weight: Font.Medium
+                            color: Appearance.m3colors.m3onPrimary
+                            text: agyLoginProc.running ? Translation.tr("Waiting...") : Translation.tr("Sign in")
+                        }
+                    }
+                    RippleButton {
+                        implicitWidth: 28
+                        implicitHeight: 28
+                        buttonRadius: Appearance.rounding.full
+                        onClicked: root.refreshAgyAuth()
+                        contentItem: MaterialSymbol {
+                            anchors.centerIn: parent
+                            text: "refresh"
+                            iconSize: 16
+                            color: Appearance.m3colors.m3onSurface
+                        }
+                    }
+                }
+
+            }
+        }
+
+        AgyModelPicker {
+            visible: root.modelPickerOpen
+            Layout.fillWidth: true
+            onCloseRequested: root.modelPickerOpen = false
+        }
+
+        AgyConfigPicker {
+            visible: root.configPickerOpen
+            Layout.fillWidth: true
+            onCloseRequested: root.configPickerOpen = false
+        }
+
         Rectangle { // Input area
             id: inputWrapper
             property real spacing: 5
             Layout.fillWidth: true
             radius: Appearance.rounding.normal - root.padding
             color: Appearance.colors.colLayer2
-            implicitHeight: Math.max(inputFieldRowLayout.implicitHeight + inputFieldRowLayout.anchors.topMargin + commandButtonsRow.implicitHeight + commandButtonsRow.anchors.bottomMargin + spacing, 45) + (attachedFileIndicator.implicitHeight + spacing + attachedFileIndicator.anchors.topMargin)
+            implicitHeight: Math.max(inputFieldRowLayout.implicitHeight + inputFieldRowLayout.anchors.topMargin + commandButtonsRow.implicitHeight + commandButtonsRow.anchors.bottomMargin + spacing, 45) + (attachedFileIndicator.implicitHeight + spacing + attachedFileIndicator.anchors.topMargin) + (extraAttachedCol.visible ? extraAttachedCol.implicitHeight + 4 : 0)
             clip: true
 
             Behavior on implicitHeight {
@@ -492,6 +703,29 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 }
                 filePath: Ai.pendingFilePath
                 onRemove: Ai.attachFile("")
+            }
+
+            ColumnLayout {
+                id: extraAttachedCol
+                visible: root.extraAttachedFiles.length > 0
+                anchors {
+                    top: attachedFileIndicator.bottom
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: 5
+                    rightMargin: 5
+                    topMargin: visible ? 4 : 0
+                }
+                spacing: 4
+                Repeater {
+                    model: root.extraAttachedFiles
+                    delegate: AttachedFileIndicator {
+                        required property string modelData
+                        Layout.fillWidth: true
+                        filePath: modelData
+                        onRemove: root.removeExtraAttachedFile(modelData)
+                    }
+                }
             }
 
             RowLayout { // Input field and send button
@@ -513,6 +747,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
                     StyledTextArea { // The actual TextArea (inside ScrollView to enable scrolling)
                         id: messageInputField
+                        onActiveFocusChanged: if (activeFocus) { root.modelPickerOpen = false; root.configPickerOpen = false; }
                         anchors.fill: parent
                         wrapMode: TextArea.Wrap
                         padding: 10
@@ -622,6 +857,16 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 });
                             } else if (messageInputField.text.startsWith(root.commandPrefix)) {
                                 root.suggestionQuery = messageInputField.text;
+                                const isAgy = Ai.getModel()?.api_format === "agy";
+                                if (isAgy) {
+                                    const q = messageInputField.text.substring(1).toLowerCase();
+                                    root.suggestionList = Ai.agyCommands.filter(cmd => cmd.name.startsWith(q)).map(cmd => ({
+                                        name: `${root.commandPrefix}${cmd.name}`,
+                                        description: cmd.description,
+                                        instant: cmd.instant,
+                                    }));
+                                    return;
+                                }
                                 root.suggestionList = root.allCommands.filter(cmd => cmd.name.startsWith(messageInputField.text.substring(1))).map(cmd => {
                                     return {
                                         name: `${root.commandPrefix}${cmd.name}`,
@@ -646,11 +891,21 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                             } else if (event.key === Qt.Key_Down && suggestions.visible) {
                                 suggestions.selectedIndex = Math.min(root.suggestionList.length - 1, suggestions.selectedIndex + 1);
                                 event.accepted = true;
+                            } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_C && Ai.isGenerating && messageInputField.selectedText.length === 0) {
+                                Ai.stopGeneration();
+                                event.accepted = true;
                             } else if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)) {
                                 if (event.modifiers & Qt.ShiftModifier) {
                                     // Insert newline
                                     messageInputField.insert(messageInputField.cursorPosition, "\n");
                                     event.accepted = true;
+                                } else if (suggestions.visible && root.suggestionList.length > 0 && Ai.getModel()?.api_format === "agy") {
+                                    const sel = root.suggestionList[suggestions.selectedIndex] ?? root.suggestionList[0];
+                                    if (sel) {
+                                        suggestions.acceptSuggestion(sel.name, sel.instant ?? false);
+                                        event.accepted = true;
+                                        return;
+                                    }
                                 } else {
                                     // Accept text
                                     const inputText = messageInputField.text;
@@ -683,8 +938,14 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 }
                                 event.accepted = false; // No image, let text pasting proceed
                             } else if (event.key === Qt.Key_Escape) {
-                                // Esc to detach file
-                                if (Ai.pendingFilePath.length > 0) {
+                                if (root.modelPickerOpen || root.configPickerOpen) {
+                                    root.modelPickerOpen = false;
+                                    root.configPickerOpen = false;
+                                    event.accepted = true;
+                                } else if (suggestions.visible) {
+                                    messageInputField.clear();
+                                    event.accepted = true;
+                                } else if (Ai.pendingFilePath.length > 0) {
                                     Ai.attachFile("");
                                     event.accepted = true;
                                 } else {
@@ -701,16 +962,20 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     implicitWidth: 40
                     implicitHeight: 40
                     buttonRadius: Appearance.rounding.small
-                    enabled: messageInputField.text.length > 0
+                    enabled: Ai.isGenerating || messageInputField.text.length > 0
                     toggled: enabled
 
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: sendButton.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
                         onClicked: {
-                            const inputText = messageInputField.text;
-                            root.handleInput(inputText);
-                            messageInputField.clear();
+                            if (Ai.isGenerating) {
+                                Ai.stopGeneration();
+                            } else {
+                                const inputText = messageInputField.text;
+                                root.handleInput(inputText);
+                                messageInputField.clear();
+                            }
                         }
                     }
 
@@ -719,7 +984,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         horizontalAlignment: Text.AlignHCenter
                         iconSize: 22
                         color: sendButton.enabled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer2Disabled
-                        text: "arrow_upward"
+                        text: Ai.isGenerating ? "stop" : "arrow_upward"
                     }
                 }
             }
@@ -747,13 +1012,20 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 ]
 
                 ApiInputBoxIndicator {
-                    // Model indicator
+                    // Model indicator (clickable -> AgyModelPicker)
                     icon: "api"
-                    text: Ai.getModel().name
-                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL").arg(Ai.getModel().name).arg(root.commandPrefix)
+                    text: Ai.getModel()?.name ?? ""
+                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL").arg(Ai.getModel()?.name ?? "").arg(root.commandPrefix)
+                    MouseArea {
+                        z: 10
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: root.modelPickerOpen = !root.modelPickerOpen
+                    }
                 }
 
                 ApiInputBoxIndicator {
+                    visible: Ai.getModel()?.api_format !== "agy"
                     // Tool indicator
                     icon: "service_toolbox"
                     text: Ai.currentTool.charAt(0).toUpperCase() + Ai.currentTool.slice(1)
@@ -789,6 +1061,60 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         }
                     }
                 }
+            }
+        }
+    }
+
+    DropArea {
+        id: aiFileDropArea
+        anchors.fill: parent
+        z: 50
+        onEntered: drag => {
+            if (drag.hasUrls || drag.hasText)
+                drag.accept(Qt.CopyAction);
+        }
+        onDropped: drop => {
+            const list = [];
+            if (drop.hasUrls && drop.urls.length > 0) {
+                for (let i = 0; i < drop.urls.length; i++)
+                    list.push(String(drop.urls[i]));
+            } else if (drop.hasText) {
+                const lines = drop.text.trim().split(/\r?\n/);
+                for (let i = 0; i < lines.length; i++)
+                    if (lines[i].trim()) list.push(lines[i].trim());
+            }
+            if (list.length > 0) {
+                root.attachDroppedFiles(list);
+                drop.accept(Qt.CopyAction);
+            }
+        }
+    }
+
+    Rectangle {
+        visible: aiFileDropArea.containsDrag
+        anchors.fill: parent
+        anchors.margins: 6
+        z: 51
+        radius: Appearance.rounding.normal
+        color: ColorUtils.transparentize(Appearance.colors.colPrimaryContainer, 0.72)
+        border.width: 2
+        border.color: Appearance.colors.colPrimary
+
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 6
+            MaterialSymbol {
+                Layout.alignment: Qt.AlignHCenter
+                text: "attach_file"
+                iconSize: 32
+                color: Appearance.colors.colPrimary
+            }
+            StyledText {
+                Layout.alignment: Qt.AlignHCenter
+                font.pixelSize: Appearance.font.pixelSize.normal
+                font.weight: Font.Medium
+                color: Appearance.colors.colOnPrimaryContainer
+                text: Translation.tr("Drop file to attach")
             }
         }
     }

@@ -124,7 +124,15 @@ Scope { // Scope
             Connections {
                 target: GlobalFocusGrab
                 function onDismissed() {
-                    panelWindow.hide();
+                    if (!GlobalStates.animeViewerOpen && !root.pin) panelWindow.hide();
+                }
+            }
+            Connections {
+                target: GlobalStates
+                function onAnimeViewerOpenChanged() {
+                    if (!GlobalStates.animeViewerOpen && panelWindow.visible) {
+                        GlobalFocusGrab.addDismissable(panelWindow);
+                    }
                 }
             }
 
@@ -151,7 +159,7 @@ Scope { // Scope
                 }
 
                 Keys.onPressed: (event) => {
-                    if (event.key === Qt.Key_Escape) {
+                    if (event.key === Qt.Key_Escape && !GlobalStates.animeViewerOpen) {
                         panelWindow.hide();
                     }
                     if (event.modifiers === Qt.ControlModifier) {

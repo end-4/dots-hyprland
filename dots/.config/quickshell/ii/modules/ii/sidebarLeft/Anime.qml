@@ -20,6 +20,7 @@ Item {
     property string downloadPath: Directories.booruDownloads
     property string nsfwPath: Directories.booruDownloadsNsfw
     property string commandPrefix: "/"
+    property bool providerPickerOpen: false
     property real scrollOnNewResponse: 100
     property int tagSuggestionDelay: 210
     property var suggestionQuery: ""
@@ -162,7 +163,17 @@ Item {
                 }
             }
 
-            ScrollEdgeFade {
+            MouseArea {
+            id: animeClickDismiss
+            anchors.fill: parent
+            visible: root.providerPickerOpen
+            z: 5
+            onPressed: mouse => {
+                root.providerPickerOpen = false;
+                mouse.accepted = false;
+            }
+        }
+        ScrollEdgeFade {
                 z: 1
                 target: booruResponseListView
                 vertical: true
@@ -250,53 +261,12 @@ Item {
             showArrows: root.suggestionList.length > 1
         }
 
-        FlowButtonGroup { // Tag suggestions
+        CliSlashList {
             id: tagSuggestions
             visible: root.suggestionList.length > 0 && tagInputField.text.length > 0
-            property int selectedIndex: 0
             Layout.fillWidth: true
-            spacing: 5
-
-            Repeater {
-                id: tagSuggestionRepeater
-                model: {
-                    tagSuggestions.selectedIndex = 0
-                    return root.suggestionList.slice(0, 10)
-                }
-                delegate: ApiCommandButton {
-                    id: tagButton
-                    colBackground: tagSuggestions.selectedIndex === index ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSecondaryContainer
-                    bounce: false
-                    contentItem: RowLayout {
-                        anchors.centerIn: parent
-                        spacing: 5
-                        StyledText {
-                            Layout.fillWidth: false
-                            font.pixelSize: Appearance.font.pixelSize.small
-                            color: Appearance.colors.colOnSecondaryContainer
-                            horizontalAlignment: Text.AlignRight
-                            text: modelData.displayName ?? modelData.name
-                        }
-                        StyledText {
-                            Layout.fillWidth: false
-                            visible: modelData.count !== undefined
-                            font.pixelSize: Appearance.font.pixelSize.smaller
-                            color: Appearance.colors.colOnSecondaryContainer
-                            horizontalAlignment: Text.AlignLeft
-                            text: modelData.count ?? ""
-                        }
-                    }
-
-                    onHoveredChanged: {
-                        if (tagButton.hovered) {
-                            tagSuggestions.selectedIndex = index;
-                        }
-                    }
-                    onClicked: {
-                        tagSuggestions.acceptTag(modelData.name)
-                    }
-                }
-            }
+            model: root.suggestionList
+            onItemAccepted: item => tagSuggestions.acceptTag(item.name)
 
             function acceptTag(tag) {
                 const words = tagInputField.text.trim().split(/\s+/);
@@ -307,14 +277,79 @@ Item {
                 }
                 const updatedText = words.join(" ") + " ";
                 tagInputField.text = updatedText;
+                root.suggestionList = []; // clear after accept
                 tagInputField.cursorPosition = tagInputField.text.length;
                 tagInputField.forceActiveFocus();
             }
 
             function acceptSelectedTag() {
-                if (tagSuggestions.selectedIndex >= 0 && tagSuggestions.selectedIndex < tagSuggestionRepeater.count) {
-                    const tag = root.suggestionList[tagSuggestions.selectedIndex].name;
-                    tagSuggestions.acceptTag(tag);
+                const sel = tagSuggestions.currentItem();
+                if (sel) tagSuggestions.acceptTag(sel.name);
+            }
+        }
+
+        Rectangle { // Inline Anime Provider Picker
+            id: animeProviderPicker
+            visible: root.providerPickerOpen
+            Layout.fillWidth: true
+            implicitHeight: Math.min(240, provCol.implicitHeight + 14)
+            clip: true
+            radius: Appearance.rounding.normal
+            color: Appearance.colors.colLayer2
+            border.width: 1
+            border.color: Appearance.colors.colOutlineVariant
+
+            ColumnLayout {
+                id: provCol
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.margins: 8
+                spacing: 4
+                StyledText {
+                    Layout.leftMargin: 6
+                    font.pixelSize: Appearance.font.pixelSize.smaller
+                    font.weight: Font.Medium
+                    color: Appearance.colors.colSubtext
+                    text: Translation.tr("Providers")
+                }
+                ListView {
+                    id: provList
+                    Layout.fillWidth: true
+                    implicitHeight: Math.min(190, contentHeight)
+                    clip: true
+                    spacing: 2
+                    model: Booru.providerList
+                    delegate: RippleButton {
+                        required property string modelData
+                        readonly property bool active: Booru.currentProvider === modelData
+                        width: provList.width
+                        implicitHeight: 30
+                        buttonRadius: Appearance.rounding.small
+                        colBackground: active ? Appearance.colors.colPrimaryContainer : "transparent"
+                        colBackgroundHover: active ? Appearance.colors.colPrimaryContainer : Appearance.colors.colSurfaceContainerHigh
+                        onClicked: {
+                            Booru.setProvider(modelData);
+                            root.providerPickerOpen = false;
+                        }
+                        contentItem: RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 8
+                            anchors.rightMargin: 8
+                            StyledText {
+                                Layout.fillWidth: true
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                color: active ? Appearance.colors.colOnPrimaryContainer : Appearance.m3colors.m3onSurface
+                                text: Booru.providers[modelData]?.name ?? modelData
+                            }
+                            MaterialSymbol {
+                                visible: active
+                                text: "check"
+                                iconSize: 16
+                                color: Appearance.colors.colPrimary
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -344,6 +379,7 @@ Item {
 
                 StyledTextArea { // The actual TextArea
                     id: tagInputField
+                    onActiveFocusChanged: if (activeFocus) root.providerPickerOpen = false;
                     wrapMode: TextArea.Wrap
                     Layout.fillWidth: true
                     padding: 10
@@ -416,17 +452,26 @@ Item {
                         if (event.key === Qt.Key_Tab) {
                             tagSuggestions.acceptSelectedTag();
                             event.accepted = true;
+                        } else if (event.key === Qt.Key_Escape) {
+                            if (root.providerPickerOpen) { root.providerPickerOpen = false; event.accepted = true; return; }
+                            if (tagSuggestions.visible) { tagInputField.clear(); event.accepted = true; return; }
                         } else if (event.key === Qt.Key_Up) {
-                            tagSuggestions.selectedIndex = Math.max(0, tagSuggestions.selectedIndex - 1);
+                            tagSuggestions.moveUp();
                             event.accepted = true;
                         } else if (event.key === Qt.Key_Down) {
-                            tagSuggestions.selectedIndex = Math.min(root.suggestionList.length - 1, tagSuggestions.selectedIndex + 1);
+                            tagSuggestions.moveDown();
                             event.accepted = true;
                         } else if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)) {
                             if (event.modifiers & Qt.ShiftModifier) {
                                 // Insert newline
                                 tagInputField.insert(tagInputField.cursorPosition, "\n")
                                 event.accepted = true
+                            } else if (tagSuggestions.visible) { // enter sends selected
+                                tagSuggestions.acceptSelectedTag();
+                                const inputText = tagInputField.text.trim();
+                                if (inputText.length > 0) root.handleInput(inputText);
+                                tagInputField.clear();
+                                event.accepted = true;
                             } else { // Accept text
                                 const inputText = tagInputField.text
                                 root.handleInput(inputText)
@@ -479,8 +524,9 @@ Item {
 
                 property var commandsShown: [
                     {
-                        name: "mode",
+                        name: "",
                         sendDirectly: false,
+                        dontAddSpace: true
                     },
                     {
                         name: "clear",
@@ -488,12 +534,18 @@ Item {
                     }, 
                 ]
 
-                ApiInputBoxIndicator { // Tool indicator
+                ApiInputBoxIndicator { // Tool indicator (clickable)
                     icon: "api"
                     text: Booru.providers[Booru.currentProvider].name
                     tooltipText: Translation.tr("Current API endpoint: %1\nSet it with %2mode PROVIDER")
                         .arg(Booru.providers[Booru.currentProvider].url)
                         .arg(root.commandPrefix)
+                    MouseArea {
+                        z: 10
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: root.providerPickerOpen = !root.providerPickerOpen
+                    }
                 }
 
                 StyledText {

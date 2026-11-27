@@ -91,7 +91,7 @@ Singleton {
             root.keyReady = true;
             root.getToken();
         } else {
-            KeyringStorage.fetchKeyringData();
+            if (!Config.options.lock.launchOnStartup) KeyringStorage.fetchKeyringData();
         }
     }
 

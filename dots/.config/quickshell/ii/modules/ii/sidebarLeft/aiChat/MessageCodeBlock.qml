@@ -221,7 +221,18 @@ ColumnLayout {
                         // wrapMode: TextEdit.Wrap
                         color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
 
-                        text: segmentContent
+                        function formatDiffHtml(raw) {
+                            const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                            return raw.split("\n").map(ln => {
+                                if (ln.startsWith("+") && !ln.startsWith("+++")) return `<font color="#a6e3a1">${esc(ln)}</font>`;
+                                if (ln.startsWith("-") && !ln.startsWith("---")) return `<font color="#f38ba8">${esc(ln)}</font>`;
+                                if (ln.startsWith("@@")) return `<font color="#89b4fa">${esc(ln)}</font>`;
+                                return esc(ln);
+                            }).join("<br>");
+                        }
+                        readonly property bool isDiffBlock: !editing && (segmentLang === "diff" || (/^\+[^+]/m.test(segmentContent) && /^-[^-]/m.test(segmentContent)))
+                        textFormat: isDiffBlock ? TextEdit.RichText : TextEdit.PlainText
+                        text: isDiffBlock ? formatDiffHtml(segmentContent) : segmentContent
                         onTextChanged: {
                             segmentContent = text
                         }
