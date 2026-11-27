@@ -497,6 +497,7 @@ Singleton {
 
             property JsonObject sidebar: JsonObject {
                 property bool keepRightSidebarLoaded: true
+                property bool ctrlJkScroll: false // Ctrl+J/K scroll the AI chat and Anime lists. Overrides Ctrl+K "delete to end of line" in their input fields
                 property JsonObject translator: JsonObject {
                     property bool enable: false
                     property int delay: 300 // Delay before sending request. Reduces (potential) rate limits and lag.

@@ -27,6 +27,17 @@ ListView {
         root.dragDistance = 0
     }
 
+    // Scrolls by delta pixels, clamped to the content bounds (including margins).
+    // Steps stack on the pending animation target, so repeated calls scroll continuously.
+    function scrollByAmount(delta) {
+        const minY = root.originY - root.topMargin;
+        const maxY = Math.max(minY, root.originY + root.contentHeight + root.bottomMargin - root.height);
+        const base = scrollAnim.running ? root.scrollTargetY : root.contentY;
+        const targetY = Math.max(minY, Math.min(base + delta, maxY));
+        root.scrollTargetY = targetY;
+        root.contentY = targetY;
+    }
+
     maximumFlickVelocity: 3500
     boundsBehavior: Flickable.DragOverBounds
     ScrollBar.vertical: StyledScrollBar {}

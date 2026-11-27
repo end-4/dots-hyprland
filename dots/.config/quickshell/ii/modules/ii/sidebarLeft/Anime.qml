@@ -121,9 +121,25 @@ Item {
         }
     }
 
+    // Ctrl+J/K scrolling, also called from the input field so it runs before the field's own Ctrl+K handling
+    function handleCtrlJkScroll(event) {
+        if (!Config.options.sidebar.ctrlJkScroll || event.modifiers !== Qt.ControlModifier)
+            return false
+        if (event.key === Qt.Key_J) {
+            booruResponseListView.scrollByAmount(100)
+        } else if (event.key === Qt.Key_K) {
+            booruResponseListView.scrollByAmount(-100)
+        } else {
+            return false
+        }
+        event.accepted = true
+        return true
+    }
+
     property real pageKeyScrollAmount: booruResponseListView.height / 2
     Keys.onPressed: (event) => {
         tagInputField.forceActiveFocus()
+        if (root.handleCtrlJkScroll(event)) return
         if (event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageUp) {
                 if (booruResponseListView.atYBeginning) return;
@@ -413,6 +429,7 @@ Item {
                     }
 
                     Keys.onPressed: (event) => {
+                        if (root.handleCtrlJkScroll(event)) return
                         if (event.key === Qt.Key_Tab) {
                             tagSuggestions.acceptSelectedTag();
                             event.accepted = true;
