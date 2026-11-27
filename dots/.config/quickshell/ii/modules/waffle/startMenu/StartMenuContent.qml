@@ -69,12 +69,12 @@ WBarAttachedPanelContent {
             }
         }
 
-        // Arrow keys for item navigation
-        if (event.key === Qt.Key_Down) {
+        // Arrow keys and Ctrl+N / Ctrl+P for item navigation
+        if (event.key === Qt.Key_Down || (event.modifiers === Qt.ControlModifier && event.key === Qt.Key_N)) {
             let maxIndex = Math.max(0, LauncherSearch.results.length - 1);
             context.setCurrentIndex(Math.min(context.currentIndex + 1, maxIndex));
             event.accepted = true;
-        } else if (event.key === Qt.Key_Up) {
+        } else if (event.key === Qt.Key_Up || (event.modifiers === Qt.ControlModifier && event.key === Qt.Key_P)) {
             context.setCurrentIndex(Math.max(context.currentIndex - 1, 0));
             event.accepted = true;
         }
