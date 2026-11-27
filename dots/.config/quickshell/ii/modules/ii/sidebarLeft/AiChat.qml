@@ -236,6 +236,28 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         },
     ]
 
+    property var extraAttachedFiles: []
+
+    function attachDroppedFiles(rawList) {
+        const next = root.extraAttachedFiles.slice();
+        for (let i = 0; i < rawList.length; i++) {
+            let p = String(rawList[i] ?? "").trim();
+            if (p.startsWith("file://")) p = FileUtils.trimFileProtocol(p);
+            try { p = decodeURIComponent(p); } catch (e) {}
+            if (!p) continue;
+            if (Ai.pendingFilePath === "") {
+                Ai.attachFile(p);
+            } else if (Ai.pendingFilePath !== p && next.indexOf(p) < 0) {
+                next.push(p);
+            }
+        }
+        root.extraAttachedFiles = next;
+    }
+
+    function removeExtraAttachedFile(path) {
+        root.extraAttachedFiles = root.extraAttachedFiles.filter(p => p !== path);
+    }
+
     function handleInput(inputText) {
         if (Ai.getModel()?.api_format === "agy" && inputText.startsWith(root.commandPrefix)) {
             const parts = inputText.trim().split(/\s+/);
@@ -247,7 +269,12 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 return;
             }
             if (cmd === "clear") { Ai.clearMessages(); return; }
-            Ai.sendUserMessage(inputText);
+            const extraFiles = root.extraAttachedFiles.slice();
+            root.extraAttachedFiles = [];
+            const finalMsg = extraFiles.length > 0
+                ? extraFiles.map(p => `[Attached file: ${p}]`).join("\n") + (inputText ? "\n" + inputText : "")
+                : inputText;
+            Ai.sendUserMessage(finalMsg);
             return;
         }
         if (inputText.startsWith(root.commandPrefix)) {
@@ -659,7 +686,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             Layout.fillWidth: true
             radius: Appearance.rounding.normal - root.padding
             color: Appearance.colors.colLayer2
-            implicitHeight: Math.max(inputFieldRowLayout.implicitHeight + inputFieldRowLayout.anchors.topMargin + commandButtonsRow.implicitHeight + commandButtonsRow.anchors.bottomMargin + spacing, 45) + (attachedFileIndicator.implicitHeight + spacing + attachedFileIndicator.anchors.topMargin)
+            implicitHeight: Math.max(inputFieldRowLayout.implicitHeight + inputFieldRowLayout.anchors.topMargin + commandButtonsRow.implicitHeight + commandButtonsRow.anchors.bottomMargin + spacing, 45) + (attachedFileIndicator.implicitHeight + spacing + attachedFileIndicator.anchors.topMargin) + (extraAttachedCol.visible ? extraAttachedCol.implicitHeight + 4 : 0)
             clip: true
 
             Behavior on implicitHeight {
@@ -676,6 +703,29 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 }
                 filePath: Ai.pendingFilePath
                 onRemove: Ai.attachFile("")
+            }
+
+            ColumnLayout {
+                id: extraAttachedCol
+                visible: root.extraAttachedFiles.length > 0
+                anchors {
+                    top: attachedFileIndicator.bottom
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: 5
+                    rightMargin: 5
+                    topMargin: visible ? 4 : 0
+                }
+                spacing: 4
+                Repeater {
+                    model: root.extraAttachedFiles
+                    delegate: AttachedFileIndicator {
+                        required property string modelData
+                        Layout.fillWidth: true
+                        filePath: modelData
+                        onRemove: root.removeExtraAttachedFile(modelData)
+                    }
+                }
             }
 
             RowLayout { // Input field and send button
@@ -1011,6 +1061,60 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         }
                     }
                 }
+            }
+        }
+    }
+
+    DropArea {
+        id: aiFileDropArea
+        anchors.fill: parent
+        z: 50
+        onEntered: drag => {
+            if (drag.hasUrls || drag.hasText)
+                drag.accept(Qt.CopyAction);
+        }
+        onDropped: drop => {
+            const list = [];
+            if (drop.hasUrls && drop.urls.length > 0) {
+                for (let i = 0; i < drop.urls.length; i++)
+                    list.push(String(drop.urls[i]));
+            } else if (drop.hasText) {
+                const lines = drop.text.trim().split(/\r?\n/);
+                for (let i = 0; i < lines.length; i++)
+                    if (lines[i].trim()) list.push(lines[i].trim());
+            }
+            if (list.length > 0) {
+                root.attachDroppedFiles(list);
+                drop.accept(Qt.CopyAction);
+            }
+        }
+    }
+
+    Rectangle {
+        visible: aiFileDropArea.containsDrag
+        anchors.fill: parent
+        anchors.margins: 6
+        z: 51
+        radius: Appearance.rounding.normal
+        color: ColorUtils.transparentize(Appearance.colors.colPrimaryContainer, 0.72)
+        border.width: 2
+        border.color: Appearance.colors.colPrimary
+
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 6
+            MaterialSymbol {
+                Layout.alignment: Qt.AlignHCenter
+                text: "attach_file"
+                iconSize: 32
+                color: Appearance.colors.colPrimary
+            }
+            StyledText {
+                Layout.alignment: Qt.AlignHCenter
+                font.pixelSize: Appearance.font.pixelSize.normal
+                font.weight: Font.Medium
+                color: Appearance.colors.colOnPrimaryContainer
+                text: Translation.tr("Drop file to attach")
             }
         }
     }

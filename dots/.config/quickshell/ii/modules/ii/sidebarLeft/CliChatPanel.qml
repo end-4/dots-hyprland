@@ -9,6 +9,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.common.widgets
+import "./aiChat"
 
 Item {
     id: root
@@ -28,6 +29,33 @@ Item {
     property var modelCatalog: []
     property var cliCommands: []
     property var suggestionList: []
+    property var pendingFilePaths: []
+
+    function normalizePath(rawPath: string) {
+        let p = (rawPath ?? "").trim();
+        if (p.startsWith("file://"))
+            p = FileUtils.trimFileProtocol(p);
+        try { p = decodeURIComponent(p); } catch (e) {}
+        return p;
+    }
+
+    function attachFiles(rawList) {
+        const next = root.pendingFilePaths.slice();
+        for (let i = 0; i < rawList.length; i++) {
+            const p = root.normalizePath(String(rawList[i] ?? ""));
+            if (p && next.indexOf(p) < 0)
+                next.push(p);
+        }
+        root.pendingFilePaths = next;
+    }
+
+    function attachFile(rawPath: string) {
+        root.attachFiles([rawPath]);
+    }
+
+    function removeAttachedFile(path: string) {
+        root.pendingFilePaths = root.pendingFilePaths.filter(p => p !== path);
+    }
 
     readonly property string metaScript: FileUtils.trimFileProtocol(`${Directories.scriptPath}/ai/fetch-cli-meta.py`)
 
@@ -197,7 +225,7 @@ Item {
 
     function sendPrompt(rawText: string) {
         const text = rawText.trim();
-        if (!text || root.busy)
+        if ((!text && root.pendingFilePaths.length === 0) || root.busy)
             return;
 
         if (text.startsWith("/")) {
@@ -214,16 +242,27 @@ Item {
                 root.clearChat();
                 return;
             }
+            if (cmd === "/attach") {
+                root.attachFile(text.slice(7).trim());
+                return;
+            }
         }
 
-        root.appendMessage("user", text);
+        const attached = root.pendingFilePaths.slice();
+        root.pendingFilePaths = [];
+        const attachedHeader = attached.map(p => `[Attached file: ${p}]`).join("\n");
+        const promptText = attached.length > 0
+            ? (text !== "" ? `${attachedHeader}\n${text}` : `${attachedHeader}\nPlease inspect these files.`)
+            : text;
+
+        root.appendMessage("user", promptText);
         root.appendMessage("assistant", "");
         root.busy = true;
 
         const m = currentModelObj();
         if (root.backend === "claude") {
             const args = [
-                "claude", "-p", text,
+                "claude", "-p", promptText,
                 "--output-format", "stream-json",
                 "--verbose",
                 "--include-partial-messages",
@@ -245,7 +284,12 @@ Item {
             if (m.efforts && m.efforts.length > 0) {
                 args.push("-c", `model_reasoning_effort="${root.selectedEffort}"`);
             }
-            args.push("--skip-git-repo-check", text);
+            for (let i = 0; i < attached.length; i++) {
+                if (/\.(png|jpe?g|webp|gif)$/i.test(attached[i])) {
+                    args.push("-i", attached[i]);
+                }
+            }
+            args.push("--skip-git-repo-check", promptText);
             runner.command = ["bash", "-c", 'exec "$@" </dev/null', "_", ...args];
         }
         runner.running = true;
@@ -771,6 +815,21 @@ Item {
                 anchors.margins: 6
                 spacing: 4
 
+                ColumnLayout {
+                    visible: root.pendingFilePaths.length > 0
+                    Layout.fillWidth: true
+                    spacing: 4
+                    Repeater {
+                        model: root.pendingFilePaths
+                        delegate: AttachedFileIndicator {
+                            required property string modelData
+                            Layout.fillWidth: true
+                            filePath: modelData
+                            onRemove: root.removeAttachedFile(modelData)
+                        }
+                    }
+                }
+
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: 6
@@ -831,7 +890,7 @@ Item {
                         implicitWidth: 36
                         implicitHeight: 36
                         buttonRadius: Appearance.rounding.small
-                        enabled: root.busy || inputField.text.length > 0
+                        enabled: root.busy || inputField.text.length > 0 || root.pendingFilePaths.length > 0
                         toggled: enabled
                         onClicked: {
                             if (root.busy) {
@@ -880,6 +939,60 @@ Item {
                         onClicked: root.clearChat()
                     }
                 }
+            }
+        }
+    }
+
+    DropArea {
+        id: fileDropArea
+        anchors.fill: parent
+        z: 50
+        onEntered: drag => {
+            if (drag.hasUrls || drag.hasText)
+                drag.accept(Qt.CopyAction);
+        }
+        onDropped: drop => {
+            const list = [];
+            if (drop.hasUrls && drop.urls.length > 0) {
+                for (let i = 0; i < drop.urls.length; i++)
+                    list.push(String(drop.urls[i]));
+            } else if (drop.hasText) {
+                const lines = drop.text.trim().split(/\r?\n/);
+                for (let i = 0; i < lines.length; i++)
+                    if (lines[i].trim()) list.push(lines[i].trim());
+            }
+            if (list.length > 0) {
+                root.attachFiles(list);
+                drop.accept(Qt.CopyAction);
+            }
+        }
+    }
+
+    Rectangle {
+        visible: fileDropArea.containsDrag
+        anchors.fill: parent
+        anchors.margins: 6
+        z: 51
+        radius: Appearance.rounding.normal
+        color: ColorUtils.transparentize(Appearance.colors.colPrimaryContainer, 0.72)
+        border.width: 2
+        border.color: Appearance.colors.colPrimary
+
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 6
+            MaterialSymbol {
+                Layout.alignment: Qt.AlignHCenter
+                text: "attach_file"
+                iconSize: 32
+                color: Appearance.colors.colPrimary
+            }
+            StyledText {
+                Layout.alignment: Qt.AlignHCenter
+                font.pixelSize: Appearance.font.pixelSize.normal
+                font.weight: Font.Medium
+                color: Appearance.colors.colOnPrimaryContainer
+                text: Translation.tr("Drop file to attach")
             }
         }
     }

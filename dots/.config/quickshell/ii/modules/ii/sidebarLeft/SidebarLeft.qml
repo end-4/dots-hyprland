@@ -124,7 +124,7 @@ Scope { // Scope
             Connections {
                 target: GlobalFocusGrab
                 function onDismissed() {
-                    if (!GlobalStates.animeViewerOpen) panelWindow.hide();
+                    if (!GlobalStates.animeViewerOpen && !root.pin) panelWindow.hide();
                 }
             }
             Connections {
