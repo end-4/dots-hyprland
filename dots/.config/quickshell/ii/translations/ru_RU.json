@@ -756,5 +756,13 @@
   "Fr": "Пт/*keep*/",
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
-  "Unpin": "Откреп"
+  "Unpin": "Откреп",
+  "Startup Apps": "Приложения в автозагрузке",
+  "Select installed app...": "Выбрать установленное приложение...",
+  "App name": "Название приложения",
+  "Command or path": "Команда или путь",
+  "No startup apps found": "Приложения автозагрузки не найдены",
+  "Date added": "Дата добавления",
+  "Active status": "Состояние",
+  "Name": "Имя"
 }

@@ -604,5 +604,13 @@
   "Recognize music": "Musik erkennen",
   "Stroke width": "Strichstärke",
   "Use varying shapes for password characters": "Verschiedene Formen für Passwort-Zeichen verwenden",
-  "Battery full": "Batterie voll"
+  "Battery full": "Batterie voll",
+  "Startup Apps": "Autostart-Apps",
+  "Select installed app...": "Installierte App auswählen...",
+  "App name": "App-Name",
+  "Command or path": "Befehl oder Pfad",
+  "No startup apps found": "Keine Autostart-Apps gefunden",
+  "Date added": "Hinzugefügt am",
+  "Active status": "Aktivierungsstatus",
+  "Name": "Name"
 }

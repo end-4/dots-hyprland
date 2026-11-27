@@ -488,5 +488,13 @@
   "Colors": "Warna",
   "Monitors": "Monitor",
   "Fuzzy": "Fuzzy",
-  "Discord": "Discord"
+  "Discord": "Discord",
+  "Startup Apps": "Aplikasi Mulai Otomatis",
+  "Select installed app...": "Pilih aplikasi terpasang...",
+  "App name": "Nama aplikasi",
+  "Command or path": "Perintah atau jalur",
+  "No startup apps found": "Tidak ada aplikasi mulai otomatis",
+  "Date added": "Tanggal ditambahkan",
+  "Active status": "Status aktif",
+  "Name": "Nama"
 }

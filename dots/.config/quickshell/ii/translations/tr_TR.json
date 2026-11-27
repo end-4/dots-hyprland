@@ -604,5 +604,13 @@
   "Recognize music": "Müziği tanı",
   "Stroke width": "Çizgi genişliği",
   "Use varying shapes for password characters": "Şifre karakterleri için değişen şekiller kullan",
-  "Battery full": "Pil dolu"
+  "Battery full": "Pil dolu",
+  "Startup Apps": "Başlangıç Uygulamaları",
+  "Select installed app...": "Yüklü uygulamalardan seç...",
+  "App name": "Uygulama adı",
+  "Command or path": "Komut veya dosya yolu",
+  "No startup apps found": "Başlangıç uygulaması bulunamadı",
+  "Date added": "Eklenme tarihi",
+  "Active status": "Aktiflik durumu",
+  "Name": "İsim"
 }
