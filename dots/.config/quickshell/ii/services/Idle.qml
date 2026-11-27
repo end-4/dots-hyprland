@@ -36,6 +36,10 @@ Singleton {
     IdleInhibitor {
         id: idleInhibitor
         window: PanelWindow {
+            // Hyprland ignores inhibitors on fully faded-out surfaces, and fades the top layer
+            // under fullscreen windows. The bottom layer is never faded; overlay isn't either,
+            // but would block direct scanout and tearing.
+            WlrLayershell.layer: WlrLayer.Bottom
             // Inhibitor requires a "visible" surface
             // Actually not lol
             implicitWidth: 0
