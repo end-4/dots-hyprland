@@ -26,8 +26,25 @@ Item {
         }
     }
 
+    // Ctrl+J/K scrolling, also called from the input field so it runs before the field's own Ctrl+K handling
+    function handleCtrlJkScroll(event) {
+        if (!Config.options.sidebar.ctrlJkScroll || event.modifiers !== Qt.ControlModifier)
+            return false;
+        if (event.key === Qt.Key_J) {
+            messageListView.scrollByAmount(100);
+        } else if (event.key === Qt.Key_K) {
+            messageListView.scrollByAmount(-100);
+        } else {
+            return false;
+        }
+        event.accepted = true;
+        return true;
+    }
+
     Keys.onPressed: event => {
         messageInputField.forceActiveFocus();
+        if (root.handleCtrlJkScroll(event))
+            return;
         if (event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageUp) {
                 messageListView.contentY = Math.max(0, messageListView.contentY - messageListView.height / 2);
@@ -637,6 +654,8 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         }
 
                         Keys.onPressed: event => {
+                            if (root.handleCtrlJkScroll(event))
+                                return;
                             if (event.key === Qt.Key_Tab) {
                                 suggestions.acceptSelectedWord();
                                 event.accepted = true;

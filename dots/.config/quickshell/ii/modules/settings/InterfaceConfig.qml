@@ -487,6 +487,18 @@ ContentPage {
             }
         }
 
+        ConfigSwitch {
+            buttonIcon: "keyboard"
+            text: Translation.tr('Scroll with Ctrl+J/K')
+            checked: Config.options.sidebar.ctrlJkScroll
+            onCheckedChanged: {
+                Config.options.sidebar.ctrlJkScroll = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Scroll the AI chat and Anime lists. Ctrl+K no longer deletes to the end of the line in their input fields")
+            }
+        }
+
         ContentSubsection {
             title: Translation.tr("Quick toggles")
             
